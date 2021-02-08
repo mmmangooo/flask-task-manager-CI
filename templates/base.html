@@ -11,7 +11,7 @@
     <body>
         <header>
             <!--top navbar-->
-            <nav class="nav-extended text-shadow indigo accent-2">
+            <nav class="nav-extended text-shadow indigo darken-4">
                 <div class="nav-wrapper">
                     <a href="#!" class="brand-logo">Task Manager</a>
                     <a href="#" data-target="mobile-demo" class="sidenav-trigger">
@@ -26,7 +26,7 @@
                                 <a href="{{ url_for('profile', username=session['user']) }}">Profile</a>
                             </li>
                             <li>
-                                <a href="#">New Task</a>
+                                <a href="{{url_for('add_task')}}">New Task</a>
                             </li>
                             <li>
                                 <a href="#">Manage Categories</a>
@@ -50,7 +50,7 @@
             <!-- mobile sidenav-->
             <ul class="sidenav" id="mobile-demo">
                 <li>
-                    <h4 class="center-align indigo-text text-accent-2">Task Manager</h4>
+                    <h4 class="center-align indigo-text">Task Manager</h4>
                 </li>
                 <li>
                     <a href="{{ url_for('get_tasks') }}">Home</a>
@@ -60,7 +60,7 @@
                                 <a href="{{ url_for('profile', username=session['user']) }}">Profile</a>
                             </li>
                             <li>
-                                <a href="#">New Task</a>
+                                <a href="{{url_for('add_task')}}">New Task</a>
                             </li>
                             <li>
                                 <a href="#">Manage Categories</a>
