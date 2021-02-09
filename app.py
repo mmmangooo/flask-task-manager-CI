@@ -60,12 +60,12 @@ def login():
         if existing_user:
             # Ensure hashes password matches user input
             if check_password_hash(
-              existing_user["password"], request.form.get("password")):
+                    existing_user["password"], request.form.get("password")):
                 session["user"] = request.form.get("username").lower()
                 flash("Welcome, {}".format(
-                    request.form.get("username")))
+                        request.form.get("username")))
                 return redirect(url_for(
-                    "profile", username=session["user"]))
+                        "profile", username=session["user"]))
             else:
                 # Invalid password match
                 flash("Incorrent Username and/or Password")
@@ -79,7 +79,7 @@ def login():
     return render_template("login.html")
 
 
-@app.route("/profile(<username>", methods=["GET", "POST"])
+@app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
     # Grab the sessions user's username from db
     username = mongo.db.users.find_one(
@@ -99,9 +99,23 @@ def logout():
     return redirect(url_for("login"))
 
 
-@app.route("/add_task")
+@app.route("/add_task", methods=["GET", "POST"])
 def add_task():
-    return render_template("add_task.html")
+    if request.method == "POST":
+        is_urgent = "on" if request.form.get("is_urgent") else "off"
+        task = {
+            "category_name": request.form.get("category_name"),
+            "task_name": request.form.get("task_name"),
+            "task_description": request.form.get("task_description"),
+            "is_urgent": is_urgent,
+            "due_date": request.form.get("due_date"),
+            "created_by": session["user"]
+        }
+        mongo.db.tasks.insert_one(task)
+        flash("Task successfully added!")
+        return redirect(url_for("get_tasks"))
+    categories = mongo.db.categories.find().sort("category_name", 1)
+    return render_template("add_task.html", categories=categories)
 
 
 if __name__ == "__main__":
